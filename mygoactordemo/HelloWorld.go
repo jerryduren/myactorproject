@@ -1,7 +1,7 @@
 package main
 
 import (
-	"mypkg/myinclude"
+	"github.com/jerryduren/myactorproject/myinclude"
 	"fmt"
 	"github.com/AsynkronIT/protoactor-go/actor"
 	"time"
