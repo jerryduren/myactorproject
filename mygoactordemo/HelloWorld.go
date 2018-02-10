@@ -19,7 +19,7 @@ func (this *HelloActor)Receive(context actor.Context){
 }
 func main() {
 	pid:=actor.Spawn(actor.FromInstance(&HelloActor{}))
-	pid.Tell(myinclude.HelloMessage{Say:"Hello World!"})
+	pid.Tell(myinclude.HelloMessage{Say:"Hello, I am Jerry Du!"})
 
 	time.Sleep(time.Second)
 }
