@@ -4,6 +4,7 @@ import (
 	"log"
 	"github.com/golang/protobuf/proto"
 	"github.com/jerryduren/myactorproject/myinclude"
+	"fmt"
 )
 
 func main() {
@@ -29,4 +30,6 @@ func main() {
 		log.Fatalf("data mismatch %q != %q", test.GetLabel(), newTest.GetLabel())
 	}
 	// etc.
+	
+	fmt.Println("Label =",test.GetLabel(),"Type =",test.GetType(),"Reps =",test.GetReps())
 }
