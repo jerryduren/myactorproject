@@ -31,7 +31,7 @@ func main() {
 		}else {
 			fmt.Println("Usge: actorhelloword <who> <say>")
 	}
-=======
+
 		fmt.Println(msg.Say)
 	case  *actor.Stopped:
 		this.stopTime = time.Now()
