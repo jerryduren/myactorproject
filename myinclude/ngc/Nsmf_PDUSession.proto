@@ -1,0 +1,81 @@
+// 这个proto文件定义Nsmf_PDUSession service
+syntax = "proto3";
+package ngc;
+
+// Define the operation of Nsmf_PDUSession Service
+service Nsmf_PDUSession{
+    // Service operation name: Nsmf_PDUSession_CreateSMContext.
+    // Description: It creates an AMF-SMF association to support a PDU Session.
+    // Input, Required: SUPI or PEI, DNN, S-NSSAI(s), PDU Session ID, AMF ID (GUAMI), N1 SM container.
+    // Input, Optional: PEI, UE location information, UE Time Zone, AN type, H-SMF identifier/address, old PDU Session ID (if the AMF also received an old PDU Session ID from the UE as specified in clause 4.3.5.2), Subscription For PDU Session Status Notification, indication that the SUPI has not been authenticated..
+    // Output, Required: Result Indication.
+    // Output, Optional: Cause, PDU Session ID, N2 SM information, N1 SM container.
+    rpc CreateSMContext(CreateSMContextRequest)  returns (CreateSMContextResponse){}
+
+    // Service operation name: Nsmf_PDUSession_Update SM Context.
+    // Description: It allows to update the AMF-SMF association to support a PDU Session and/or to provide SMF with N1/N2 SM information received from the UE or from the AN.
+    // Input, Required: SUPI.
+    // Input, Optional: PDU Session ID, N1 SM container received from the UE, N2 SM information received from the AN (e.g. N3 addressing information, notification indicating that the QoS targets cannot be fulfilled for a QFI), Operation type (e.g. UP activate, UP deactivate, UP To Be Switched), Serving GW Address(es) and Serving GW DL TEID(s) for data forwarding during HO from 5GS to EPS, UE location information, AN type, UE Time Zone, H-SMF identifier/address, EBI(s) to be revoked.
+    // Output, Required: Result Indication.
+    // Output, Optional: PDU Session ID, Cause, released EBI list, allocated EBI information, N2 SM information (e.g. QFI, UE location information, notification indication indicating that the QoS targets cannot be fulfilled), N1 SM container to be transferred to the AN/UE.
+    //rpc UpdateSMContext(UpdateSMContextRequest) returns (CreateSMContextResponse){}
+
+    // Service operation name: Nsmf_PDUSession_Release SM Context.
+    // Description: It allows to release the AMF-SMF association for a certain PDU Session because the PDU Session has been released.
+    // Input, Required: SUPI, PDU Session ID.
+    // Input, Optional: UE location information, AN type, UE Time Zone.
+    // Output, Required: Result Indication.
+    // Output, Optional: Cause.
+    //rpc ReleaseSMContext(ReleaseSMContextRequest) returns (ReleaseSMContextResponse){}
+
+    // Service operation name: Nsmf_PDUSession_SMContextStatusNotify.
+    // Description: This service operation is used by the SMF to notify its consumers about the status of an SM context related to a PDU Session.
+    // Input, Required: SUPI, PDU Session ID, Status information.
+    // Input, Optional: Cause.
+    // Output, Required: Result Indication.
+    // Output, Optional: None.
+    //rpc SMContextStatusNotify(SMContextStatusNotifyRequest) returns (SMContextStatusNotifyResponse){}
+
+    // Service operation name: Nsmf_PDUSession_StatusNotify.
+    // Description: This service operation is used by the SMF to notify its consumers about the status of a PDU Session (e.g. PDU Session is released due to local reasons within the H-SMF).
+    // Input, Required: SUPI, PDU Session ID, Status information.
+    // Input, Optional: Cause.
+    // Output, Required: Result Indication.
+    // Output, Optional: None.
+    //rpc StatusNotify(StatusNotifyRequest) returns (StatusNotifyResponse){}
+
+    // Service operation name: Nsmf_PDUSession_ContextRequest.
+    // Description: This service operation is used by the NF Consumer to request for SM Context (e.g. during EPS IWK, HO).
+    // Input, Required: SUPI.
+    // Input, Optional: Target MME Capability, PDU Session ID (include PDU Session ID when available).
+    // Output, Required: SM Context Container.
+    // Output, Optional: None.
+    //rpc Context(ContextRequest) returns (ContextResponse){}
+}
+
+// Define message for Create SM Context
+// Input, Required: SUPI or PEI, DNN, S-NSSAI(s), PDU Session ID, AMF ID (GUAMI), N1 SM container.
+// Input, Optional: PEI, UE location information, UE Time Zone, AN type, H-SMF identifier/address, old PDU Session ID (if the AMF also received an old PDU Session ID from the UE as specified in clause 4.3.5.2), Subscription For PDU Session Status Notification, indication that the SUPI has not been authenticated..
+message CreateSMContextRequest {
+  string SUPI = 2;
+  string DNN = 3;
+  uint32 S_NSSAI = 4;
+  uint64 PDU_Session_ID = 5;
+  uint32 AMF_ID = 6;
+  bytes N1_SM_Container = 7;
+  string PEI = 8;
+  string UE_Location = 9;
+  string UE_Time_Zone = 10;
+  string AN_Type = 11;
+  uint32 H_SMF_ID = 12;
+  uint64 Old_PDU_Session_ID = 13;
+};
+// Output, Required: Result Indication.
+// Output, Optional: Cause, PDU Session ID, N2 SM information, N1 SM container.
+message CreateSMContextResponse {
+  string Result_Indication = 1;
+  uint32 Cause = 2;
+  uint64 PDU_Session_ID = 3;
+  bytes N2_SM_Info = 4;
+  bytes N1_SM_Container = 5;
+};

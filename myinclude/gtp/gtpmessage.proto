@@ -1,0 +1,22 @@
+// 这个proto文件定义GTP Tunnel Protocal
+// 目前这个版本仅仅支持GTP V1协议，而且服务仅仅定义GGSN提供的服务，即GGSN做为Server的场景，后面扩展SGSN的场景
+syntax = "proto3";
+package gtp;
+
+// Define GTP Header
+message GtpHeader {
+    byte Flag = 1 [default = 0xFF]
+    byte MsgType = 2
+
+}
+
+//this is the message the remote actor should reply with
+message EchoResponse {
+  string Message = 1;
+}
+
+//this is the message the actor on node 1 will send to the remote actor on node 2
+message EchoRequest {
+    actor.PID Sender = 1; //this is the PID the remote actor should reply to
+    string Message = 2;
+}
