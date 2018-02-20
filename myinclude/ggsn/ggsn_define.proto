@@ -1,0 +1,124 @@
+syntax = "proto3";
+package ggsn;
+
+// Usage:
+// #protoc --gogoslick_out=plugins=grpc:. ggsn_define.proto
+
+enum PDPType {
+    IP = 0;
+    PPP =1;
+    NonIP = 2;
+}
+
+message GgsnPdpContext {
+    string Imsi = 1;              // KEY: 一个用户只能建立一个PDP Context
+    bool ImsiIsAuthInd = 2;
+    string Imei = 3;
+    uint32 Nsapi = 4;           // 取值5~15
+    string Msisdn = 5;
+    PDPType PdpType = 6;
+    uint32 PdpAddress = 7;   // IP Address
+    bool IsDynamicAddress = 8;
+    string ApnInUse = 9;
+    uint32 GgsnTeid_C = 10;
+    uint32 GgsnAddress_C = 11;
+    uint32 GgsnTeid_U = 12;
+    uint32 GgsnAddress_U = 13;
+    uint32 SgsnTeid_C = 14;
+    uint32 SgsnAddress_C = 15;
+    uint32 SgsnTeid_U = 16;
+    uint32 SgsnAddress_U = 17;
+    bool RecoveryFlag = 18;
+    QoS NegotiateQoS = 19;
+}
+
+message QoS {
+    uint32 MaxULBitRate = 1;
+    uint32 MaxDLBitRate = 2;
+}
+
+service GTPService {
+    rpc Echo(EchoRequest) returns (EchoResponse){}
+    rpc CreatePdpContext(CreatePdpContextRequest) returns (CreatePdpContextResponse) {}
+    rpc UpdatePdpContext(UpdatePdpContextRequest) returns (UpdatePdpContextResponse) {}
+    rpc DeletePdpContext(DeletePdpContextRequest) returns (DeletePdpContextResponse) {}
+}
+
+enum GTPMessageType {
+    RESERVED = 0;
+    ECHOREQUEST = 1;
+    ECHORESPONSE = 2;
+    CREATEPDPCONTEXTREQUEST = 16;
+    CREATEPDPCONTEXTRESPONSE = 17;
+    UPDATEPDPCONTEXTREQUEST = 18;
+    UPDATEPDPCONTEXTRESPONSE= 19;
+    DELETEPDPCONTEXTREQUEST = 20;
+    DELETEPDPCONTEXTRESPPONSE = 21;
+}
+
+// Define GTP Header
+message GtpMessageHeader {
+    uint32 Flag = 1;
+    GTPMessageType  MessageType = 2;
+    uint32 Length = 3;
+    uint32 Teid = 4;
+    uint32 SequenceNumber = 5;
+}
+
+message EchoRequest {
+    GtpMessageHeader GtpHeader = 1;
+    uint64 PrivateExt = 255;
+}
+
+message EchoResponse {
+    GtpMessageHeader GtpHeader = 1;
+    uint32 Recovery = 14;
+    uint64 PrivateExt = 255;
+}
+
+message CreatePdpContextRequest {
+    GtpMessageHeader GtpHeader = 1;
+    string Imsi = 2;              // KEY: 一个用户只能建立一个PDP Context
+    QoS QoSProfile  = 3;
+    uint32 Nsapi = 20;           // 取值5~15
+    uint32 SgsnTeid_C = 16;
+    uint32 SgsnAddress_C = 17;
+    uint32 SgsnTeid_U = 18;
+    uint32 SgsnAddress_U = 19;
+}
+
+message CreatePdpContextResponse {
+    GtpMessageHeader GtpHeader = 1;
+    uint32 Cause = 5;
+    uint32 GgsnTeid_C = 16;
+    uint32 GgsnAddress_C = 17;
+    uint32 GgsnTeid_U = 18;
+    uint32 GgsnAddress_U = 19;
+    uint32 EndUserAddress = 128;
+}
+
+message UpdatePdpContextRequest {
+    GtpMessageHeader GtpHeader = 1;
+    string Imsi = 2;              // KEY: 一个用户只能建立一个PDP Context
+    QoS QoSProfile  = 3;
+    uint32 Nsapi = 20;           // 取值5~15
+    uint32 Recovery = 14;
+}
+
+message UpdatePdpContextResponse {
+    GtpMessageHeader GtpHeader = 1;
+    uint32 Recovery = 14;
+    uint32 Cause = 5;
+}
+
+message DeletePdpContextRequest {
+    GtpMessageHeader GtpHeader = 1;
+
+    uint32 Cause = 5;
+    uint32 Nsapi = 20;           // 取值5~15
+}
+
+message DeletePdpContextResponse {
+    GtpMessageHeader GtpHeader = 1;
+    uint32 Cause = 5;
+}

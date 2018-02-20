@@ -1,9 +1,39 @@
 // 这个proto文件定义Nsmf_PDUSession service
+// 目前暂不考虑漫游Home Routing的场景
+// 即SMF作为H-SMF+V-SMF的场景
 syntax = "proto3";
 package ngc;
 
-// Define the operation of Nsmf_PDUSession Service
+import  "NumbAddrID.proto";
+
+// Define Nsmf_PDUSession Service
 service Nsmf_PDUSession{
+    // Service operation name: Nsmf_PDUSession_Create.
+    // Description: Create a new PDU Session in the H-SMF.
+    // Input, Required: SUPI, V-SMF ID, DNN, S-NSSAI, Session-AMBR, Protocol Configuration Options,  Requested PDU type, Requested SSC mode, PDU Session ID, V-CN Tunnel Information, (addressing information allowing the H-SMF to request the V-SMF to issue further operations about the PDU Session).
+    // Input, Optional: UE location information, subscription get notified of PDU Session status change, PEI, GPSI, AN type.
+    // Output, Required: Result Indication, and if success in addition: QoS Profile(s), H-CN Tunnel Info, Enable pause of charging indication, Selected PDU type and SSC mode.
+    // Output, Optional: Cause, Protocol Configuration Options, UE IP address, information needed by V-SMF in case of EPS interworking such as the PDN Connection Type.
+    //rpc Create(CreateRequest) returns (CreateResponse){}
+
+    // Service operation name: Nsmf_PDUSession_Update.
+    // Description: Update the established PDU Session.
+    // This service operation is invoked by the V-SMF towards the H-SMF in case of UE or serving network requested PDU Session Modification in order for the V-SMF to transfer the PDU Session Modification request
+    // This service operation is invoked by the H-SMF towards the V-SMF for both UE initiated and HPLMN initiated PDU Session Modification and PDU Session Release cases in order to have the SM PDU Session Modification request or SM PDU Session Release request sent to the UE.
+    // Input, Required: SUPI, PDU Session ID.
+    // Input, Optional: UE location information (ULI), UE Time Zone, AN type, indication of PDU Session Release, QoS Rule (from H-SMF to V-SMF), N9 tunnel information (from V-SMF to H-SMF), Information requested by UE for e.g. QoS (from V-SMF to H-SMF), Information necessary for V-SMF to build SM Message towards the UE (from H-SMF to V-SMF), Trigger PDU release indication (V-SMF to H-SMF), Start Pause of Charging indication, Stop Pause of Charging indication.
+    // Output, Required: Result indication.
+    // Output, Optional: UE location information, AN Type, SM information from UE (from V-SMF to H-SMF).
+    //rpc Upate(UpdateRequest) returns (UpdateResponse){}
+
+    // Service operation name: Nsmf_PDUSession_Release.
+    // Description: It causes the immediate and unconditional deletion of the resources associated with the PDU Session. This service operation is used by V-SMF to request the H-SMF to release the resources related to a PDU Session for the serving network initiated PDU release case (e.g. implicit De-registration of UE in the serving network).
+    // Input, Required: SUPI, PDU Session ID.
+    // Input, Optional: None.
+    // Output, Required: Result Indication.
+    // Output, Optional: None.
+    //rpc Release(ReleaseRequest) returns (ReleaseResponse) {}
+
     // Service operation name: Nsmf_PDUSession_CreateSMContext.
     // Description: It creates an AMF-SMF association to support a PDU Session.
     // Input, Required: SUPI or PEI, DNN, S-NSSAI(s), PDU Session ID, AMF ID (GUAMI), N1 SM container.
@@ -14,7 +44,7 @@ service Nsmf_PDUSession{
 
     // Service operation name: Nsmf_PDUSession_Update SM Context.
     // Description: It allows to update the AMF-SMF association to support a PDU Session and/or to provide SMF with N1/N2 SM information received from the UE or from the AN.
-    // Input, Required: SUPI.
+    // Input, Required: SUPI .
     // Input, Optional: PDU Session ID, N1 SM container received from the UE, N2 SM information received from the AN (e.g. N3 addressing information, notification indicating that the QoS targets cannot be fulfilled for a QFI), Operation type (e.g. UP activate, UP deactivate, UP To Be Switched), Serving GW Address(es) and Serving GW DL TEID(s) for data forwarding during HO from 5GS to EPS, UE location information, AN type, UE Time Zone, H-SMF identifier/address, EBI(s) to be revoked.
     // Output, Required: Result Indication.
     // Output, Optional: PDU Session ID, Cause, released EBI list, allocated EBI information, N2 SM information (e.g. QFI, UE location information, notification indication indicating that the QoS targets cannot be fulfilled), N1 SM container to be transferred to the AN/UE.
@@ -54,21 +84,24 @@ service Nsmf_PDUSession{
 }
 
 // Define message for Create SM Context
-// Input, Required: SUPI or PEI, DNN, S-NSSAI(s), PDU Session ID, AMF ID (GUAMI), N1 SM container.
+// Input, Required: SUPI or PEI, DNN, S-NSSAI, PDU Session ID, AMF ID (GUAMI), N1 SM container.
 // Input, Optional: PEI, UE location information, UE Time Zone, AN type, H-SMF identifier/address, old PDU Session ID (if the AMF also received an old PDU Session ID from the UE as specified in clause 4.3.5.2), Subscription For PDU Session Status Notification, indication that the SUPI has not been authenticated..
 message CreateSMContextRequest {
-  string SUPI = 2;
-  string DNN = 3;
-  uint32 S_NSSAI = 4;
-  uint64 PDU_Session_ID = 5;
-  uint32 AMF_ID = 6;
-  bytes N1_SM_Container = 7;
-  string PEI = 8;
-  string UE_Location = 9;
-  string UE_Time_Zone = 10;
-  string AN_Type = 11;
-  uint32 H_SMF_ID = 12;
-  uint64 Old_PDU_Session_ID = 13;
+  oneof Ueid {
+    NumbAddrID.SUPI Supi = 1;
+    NumbAddrID.PEI Pei =2;
+  }
+  string Dnn = 2;
+  NumbAddrID.S_NSSAI S_Nssai = 3;
+  uint64 PDU_Session_Id = 4;
+  NumbAddrID.GUAMI Amf_Id = 5;
+  bytes N1_SM_Container = 6;
+  NumbAddrID.PEI  Pei = 7;
+  string UE_Location = 8;
+  string UE_Time_Zone = 9;
+  string AN_Type = 10;
+  uint32 H_SMF_ID = 11;
+  uint64 Old_PDU_Session_ID = 12;
 };
 // Output, Required: Result Indication.
 // Output, Optional: Cause, PDU Session ID, N2 SM information, N1 SM container.

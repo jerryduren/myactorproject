@@ -1,0 +1,4 @@
+// 这个文件定义了SMF内部用到的数据结构符；
+syntax = "proto3";
+package ngc;
+
