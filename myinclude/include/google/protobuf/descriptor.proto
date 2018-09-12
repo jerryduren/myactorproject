@@ -32,7 +32,7 @@
 //  Based on original Protocol Buffers design by
 //  Sanjay Ghemawat, Jeff Dean, and others.
 //
-// The messages in this file describe the definitions found in .proto files.
+// The messages in this file describe the user found in .proto files.
 // A valid .proto file can be translated directly to a FileDescriptorProto
 // without any other information (e.g. without reading its imports).
 
@@ -70,7 +70,7 @@ message FileDescriptorProto {
   // For Google-internal migration only. Do not use.
   repeated int32 weak_dependency = 11;
 
-  // All top-level definitions in this file.
+  // All top-level user in this file.
   repeated DescriptorProto message_type = 4;
   repeated EnumDescriptorProto enum_type = 5;
   repeated ServiceDescriptorProto service = 6;
@@ -285,7 +285,7 @@ message MethodDescriptorProto {
 // ===================================================================
 // Options
 
-// Each of the definitions above may have "options" attached.  These are
+// Each of the user above may have "options" attached.  These are
 // just annotations which may cause code to be generated slightly differently
 // or may contain hints for code that manipulates protocol messages.
 //
@@ -740,7 +740,7 @@ message SourceCodeInfo {
   // - A location may refer to a repeated field itself (i.e. not to any
   //   particular index within it).  This is used whenever a set of elements are
   //   logically enclosed in a single code segment.  For example, an entire
-  //   extend block (possibly containing multiple extension definitions) will
+  //   extend block (possibly containing multiple extension user) will
   //   have an outer location whose path refers to the "extensions" repeated
   //   field without an index.
   // - Multiple locations may have the same path.  This happens when a single

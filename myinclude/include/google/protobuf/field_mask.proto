@@ -93,7 +93,7 @@ option go_package = "google.golang.org/genproto/protobuf/field_mask;field_mask";
 // field mask applies directly to the response, but in case of a REST
 // list operation, the mask instead applies to each individual message
 // in the returned resource list. In case of a REST custom method,
-// other definitions may be used. Where the mask applies will be
+// other user may be used. Where the mask applies will be
 // clearly documented together with its declaration in the API.  In
 // any case, the effect on the returned resource/resources is required
 // behavior for APIs.
