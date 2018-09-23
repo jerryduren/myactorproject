@@ -35,7 +35,7 @@ IndividualSMContextApiService Release SM Context
 */
 
 type ReleaseSmContextOpts struct {
-    SmContextReleaseData optional.Interface
+   // SmContextReleaseData optional.Interface
 }
 
 func (a *IndividualSMContextApiService) ReleaseSmContext(ctx context.Context, smContextRef string, localVarOptionals *ReleaseSmContextOpts) (*http.Response, error) {
@@ -73,6 +73,7 @@ func (a *IndividualSMContextApiService) ReleaseSmContext(ctx context.Context, sm
 		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
 	}
 	// body params
+	/*
 	if localVarOptionals != nil && localVarOptionals.SmContextReleaseData.IsSet() {
 		localVarOptionalSmContextReleaseData, localVarOptionalSmContextReleaseDataok := localVarOptionals.SmContextReleaseData.Value().(SmContextReleaseData)
 		if !localVarOptionalSmContextReleaseDataok {
@@ -80,6 +81,7 @@ func (a *IndividualSMContextApiService) ReleaseSmContext(ctx context.Context, sm
 		}
 		localVarPostBody = &localVarOptionalSmContextReleaseData
 	}
+	*/
 
 	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {
@@ -178,7 +180,7 @@ IndividualSMContextApiService Retrieve SM Context
 */
 
 type RetrieveSmContextOpts struct {
-    SmContextRetrieveData optional.Interface
+    //SmContextRetrieveData optional.Interface
 }
 
 func (a *IndividualSMContextApiService) RetrieveSmContext(ctx context.Context, smContextRef string, localVarOptionals *RetrieveSmContextOpts) (SmContextRetrievedData, *http.Response, error) {
@@ -217,13 +219,13 @@ func (a *IndividualSMContextApiService) RetrieveSmContext(ctx context.Context, s
 		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
 	}
 	// body params
-	if localVarOptionals != nil && localVarOptionals.SmContextRetrieveData.IsSet() {
+/*	if localVarOptionals != nil && localVarOptionals.SmContextRetrieveData.IsSet() {
 		localVarOptionalSmContextRetrieveData, localVarOptionalSmContextRetrieveDataok := localVarOptionals.SmContextRetrieveData.Value().(SmContextRetrieveData)
 		if !localVarOptionalSmContextRetrieveDataok {
 			return localVarReturnValue, nil, reportError("smContextRetrieveData should be SmContextRetrieveData")
 		}
 		localVarPostBody = &localVarOptionalSmContextRetrieveData
-	}
+	}*/
 
 	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {

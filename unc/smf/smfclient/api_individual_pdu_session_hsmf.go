@@ -35,7 +35,7 @@ IndividualPDUSessionHSMFApiService Release
 */
 
 type ReleasePduSessionOpts struct {
-    ReleaseData optional.Interface
+   // ReleaseData optional.Interface
 }
 
 func (a *IndividualPDUSessionHSMFApiService) ReleasePduSession(ctx context.Context, pduSessionRef string, localVarOptionals *ReleasePduSessionOpts) (*http.Response, error) {
@@ -73,13 +73,14 @@ func (a *IndividualPDUSessionHSMFApiService) ReleasePduSession(ctx context.Conte
 		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
 	}
 	// body params
+	/*  被duruchuan注釋掉了
 	if localVarOptionals != nil && localVarOptionals.ReleaseData.IsSet() {
 		localVarOptionalReleaseData, localVarOptionalReleaseDataok := localVarOptionals.ReleaseData.Value().(ReleaseData)
 		if !localVarOptionalReleaseDataok {
 			return nil, reportError("releaseData should be ReleaseData")
 		}
 		localVarPostBody = &localVarOptionalReleaseData
-	}
+	}*/
 
 	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
 	if err != nil {

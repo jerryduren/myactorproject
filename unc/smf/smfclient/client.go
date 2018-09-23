@@ -47,11 +47,11 @@ type APIClient struct {
 
 	// API Services
 
-	IndividualPDUSessionHSMFApi *IndividualPDUSessionHSMFApiService
+	//IndividualPDUSessionHSMFApi *IndividualPDUSessionHSMFApiService
 
-	IndividualSMContextApi *IndividualSMContextApiService
+	//IndividualSMContextApi *IndividualSMContextApiService
 
-	PDUSessionsCollectionApi *PDUSessionsCollectionApiService
+	//PDUSessionsCollectionApi *PDUSessionsCollectionApiService
 
 	SMContextsCollectionApi *SMContextsCollectionApiService			// Create SM Context Service Operator in V_SMF
 }
@@ -72,9 +72,9 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.common.client = c
 
 	// API Services
-	c.IndividualPDUSessionHSMFApi = (*IndividualPDUSessionHSMFApiService)(&c.common)
-	c.IndividualSMContextApi = (*IndividualSMContextApiService)(&c.common)
-	c.PDUSessionsCollectionApi = (*PDUSessionsCollectionApiService)(&c.common)
+	//c.IndividualPDUSessionHSMFApi = (*IndividualPDUSessionHSMFApiService)(&c.common)
+	//c.IndividualSMContextApi = (*IndividualSMContextApiService)(&c.common)
+	//c.PDUSessionsCollectionApi = (*PDUSessionsCollectionApiService)(&c.common)
 	c.SMContextsCollectionApi = (*SMContextsCollectionApiService)(&c.common)
 
 	return c
@@ -357,16 +357,25 @@ func setBody(body interface{}, contentType string) (bodyBuf *bytes.Buffer, err e
 	}
 
 	if reader, ok := body.(io.Reader); ok {
+		fmt.Println("a")
 		_, err = bodyBuf.ReadFrom(reader)
 	} else if b, ok := body.([]byte); ok {
+		fmt.Println("b")
 		_, err = bodyBuf.Write(b)
 	} else if s, ok := body.(string); ok {
+		fmt.Println("c")
 		_, err = bodyBuf.WriteString(s)
 	} else if s, ok := body.(*string); ok {
+		fmt.Println("d")
 		_, err = bodyBuf.WriteString(*s)
-	} else if jsonCheck.MatchString(contentType) {
+	}	 else if s,ok:=body.(*Body);ok {		//  自己增加的Body類型請躰的填充
+		b,err=json.Marshal(s.JsonData)		//  把json數據序列化后填充
+		_, err = bodyBuf.Write(b)
+	}	else if jsonCheck.MatchString(contentType) {
+		fmt.Println("e")
 		err = json.NewEncoder(bodyBuf).Encode(body)
 	} else if xmlCheck.MatchString(contentType) {
+		fmt.Println("f")
 		xml.NewEncoder(bodyBuf).Encode(body)
 	}
 
@@ -376,6 +385,7 @@ func setBody(body interface{}, contentType string) (bodyBuf *bytes.Buffer, err e
 
 	if bodyBuf.Len() == 0 {
 		err = fmt.Errorf("Invalid body type %s\n", contentType)
+		fmt.Println("failure finish.")
 		return nil, err
 	}
 	return bodyBuf, nil

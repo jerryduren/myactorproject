@@ -12,6 +12,7 @@ package smfclient
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -43,6 +44,7 @@ func (a *SMContextsCollectionApiService) PostSmContexts(ctx context.Context, bod
 
 	// create path and map variables
 	localVarPath := a.client.cfg.BasePath + "/sm-contexts"
+
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
