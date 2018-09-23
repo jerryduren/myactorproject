@@ -314,7 +314,10 @@ paths:
             application/problem+json:
               schema:
                 $ref: 'TS29571_CommonData.yaml#/components/schemas/ProblemDetails'
-  
+
+  # 标准的open API定义在URL里面都是名词，代表一种资源类型，而3GPP把url都搞成动词了，乱套了
+  # 标准的openAPI接口是通过method来体现动作的，但在3GPP里面通过这么简单的表示方法搞不定复杂的流程含义
+  # 3GPP这是在用CT的思路改造IT啊，3GPP完全是把动作放在了URI里面，URI的意思完全变了啊！！！着完全是有意在混乱逻辑啊
   /sm-contexts/{smContextRef}/modify:  
     post:
       summary:  Update SM Context 
@@ -1763,8 +1766,7 @@ components:
       type: object
       properties:
         backupAmfName:
-          type: string
-          # $ref: 'TS29571_CommonData.yaml#/components/schemas/AmfName'
+          $ref: 'TS29571_CommonData.yaml#/components/schemas/AmfName'
         guamiList:
           type: array
           items:

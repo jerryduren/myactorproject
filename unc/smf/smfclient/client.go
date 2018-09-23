@@ -42,6 +42,7 @@ var (
 // In most cases there should be only one, shared, APIClient.
 type APIClient struct {
 	cfg    *Configuration
+	// 这个可以理解为一个TCP连接为多个service共享吗?
 	common service // Reuse a single struct instead of allocating one for each service on the heap.
 
 	// API Services
@@ -52,7 +53,7 @@ type APIClient struct {
 
 	PDUSessionsCollectionApi *PDUSessionsCollectionApiService
 
-	SMContextsCollectionApi *SMContextsCollectionApiService
+	SMContextsCollectionApi *SMContextsCollectionApiService			// Create SM Context Service Operator in V_SMF
 }
 
 type service struct {
@@ -104,7 +105,7 @@ func selectHeaderAccept(accepts []string) string {
 		return "application/json"
 	}
 
-	return strings.Join(accepts, ",")
+	return strings.Join(accepts, ",")		//把切片的每个值组成一个string，用逗号隔开
 }
 
 // contains is a case insenstive match, finding needle in a haystack

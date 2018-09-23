@@ -178,6 +178,8 @@ components:
     AmfId:
       type: string
       pattern: '^[A-Fa-f0-9]{6}$'
+    AmfName:
+      type: string
     RfspIndex:
       type: integer
       minimum: 1

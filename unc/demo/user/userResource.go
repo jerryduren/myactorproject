@@ -5,7 +5,7 @@ import (
 
 	"fmt"
 	"github.com/emicklei/go-restful"
-	restfulspec "github.com/emicklei/go-restful-openapi"
+	restfulspec "github.com/emicklei/smf-restful-openapi"
 )
 
 // User is just a sample type
