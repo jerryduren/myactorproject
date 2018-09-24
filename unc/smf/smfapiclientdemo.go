@@ -10,8 +10,13 @@ import (
 func main() {
 	cfg := smfclient.NewConfiguration()
 	cfg.BasePath = "http://localhost:8080/nsmf-pdusession/v1"
+	// add customer header
+	cfg.AddDefaultHeader("myhead","w want to add a custom header.")
+	ctx:=cfg.HTTPClient.request
+//  cfg.Scheme = "token"
 
 	amf := smfclient.NewAPIClient(cfg)
+
 
 	pduCreateData := smfclient.SmContextCreateData{}
 	pduCreateData.Supi = "460021234567890"

@@ -12,7 +12,6 @@ package smfclient
 
 import (
 	"context"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -21,7 +20,7 @@ import (
 
 // Linger please
 var (
-	_ context.Context
+	_ context.Context			// 定義了context.Context這個接口變量，但是又不需要使用這個變量，僅僅是想引入這個package，就這麽辦
 )
 
 type SMContextsCollectionApiService service
@@ -32,6 +31,7 @@ SMContextsCollectionApiService Create SM Context
  * @param body representation of the SM context to be created in the SMF
 @return SmContextCreatedData
 */
+
 func (a *SMContextsCollectionApiService) PostSmContexts(ctx context.Context, body Body) (SmContextCreatedData, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Post")
@@ -46,15 +46,15 @@ func (a *SMContextsCollectionApiService) PostSmContexts(ctx context.Context, bod
 	localVarPath := a.client.cfg.BasePath + "/sm-contexts"
 
 
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
+	localVarHeaderParams := make(map[string]string)		// 注意，http消息的幾個部分裏面大部分都是map[string]string這種key-value對來表示的
+	localVarQueryParams := url.Values{}		//map[string]string的對象，可以從url裏面解析，添加，刪除key-value對等
 	localVarFormParams := url.Values{}
 
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"multipart/related"}
 
 	// set Content-Type header
-	localVarHttpContentType := selectHeaderContentType(localVarHttpContentTypes)
+	localVarHttpContentType := selectHeaderContentType(localVarHttpContentTypes)		// 這個函數優選application/json,否則設爲[0]個的值
 	if localVarHttpContentType != "" {
 		localVarHeaderParams["Content-Type"] = localVarHttpContentType
 	}
@@ -63,7 +63,7 @@ func (a *SMContextsCollectionApiService) PostSmContexts(ctx context.Context, bod
 	localVarHttpHeaderAccepts := []string{"application/json", "multipart/related"}
 
 	// set Accept header
-	localVarHttpHeaderAccept := selectHeaderAccept(localVarHttpHeaderAccepts)
+	localVarHttpHeaderAccept := selectHeaderAccept(localVarHttpHeaderAccepts)	//包含了application/json，就設為他，否則設置為多個指
 	if localVarHttpHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
 	}

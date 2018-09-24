@@ -40,11 +40,12 @@ var (
 
 // APIClient manages communication with the SMF PDU Session API v1.PreR15.0.0
 // In most cases there should be only one, shared, APIClient.
+// 這個地方用法很特別哦，多個service共享一個公共的service，但是每個service又有特別的處理，好好研究這個案例，很有意思
 type APIClient struct {
 	cfg    *Configuration
 	// 这个可以理解为一个TCP连接为多个service共享吗?
 	common service // Reuse a single struct instead of allocating one for each service on the heap.
-
+	// 這裏的service是指的web service，與3GPP裏面的服務有點差別，這裏通常一類資源算一個服務，3GPP裏面一個nsmf算一個服務，範圍要大些
 	// API Services
 
 	//IndividualPDUSessionHSMFApi *IndividualPDUSessionHSMFApiService
@@ -54,6 +55,7 @@ type APIClient struct {
 	//PDUSessionsCollectionApi *PDUSessionsCollectionApiService
 
 	SMContextsCollectionApi *SMContextsCollectionApiService			// Create SM Context Service Operator in V_SMF
+	// 可以嘗試改成注冊的方式來注冊需要提供的服務。
 }
 
 type service struct {
@@ -184,9 +186,10 @@ func (c *APIClient) prepareRequest(
 	if postBody != nil {
 		contentType := headerParams["Content-Type"]
 		if contentType == "" {
-			contentType = detectContentType(postBody)
+			contentType = detectContentType(postBody)		//如果沒有設置contentType就根據postBody自動檢測，並設置header的contentType參數，實在認不出來的就被認爲是application/octer-stream
 			headerParams["Content-Type"] = contentType
 		}
+	// 對於nsmf-pdusession smconetxt創建上述算法出來的contextType=multipart/related
 
 		body, err = setBody(postBody, contentType)
 		if err != nil {
@@ -357,25 +360,19 @@ func setBody(body interface{}, contentType string) (bodyBuf *bytes.Buffer, err e
 	}
 
 	if reader, ok := body.(io.Reader); ok {
-		fmt.Println("a")
 		_, err = bodyBuf.ReadFrom(reader)
 	} else if b, ok := body.([]byte); ok {
-		fmt.Println("b")
 		_, err = bodyBuf.Write(b)
 	} else if s, ok := body.(string); ok {
-		fmt.Println("c")
 		_, err = bodyBuf.WriteString(s)
 	} else if s, ok := body.(*string); ok {
-		fmt.Println("d")
 		_, err = bodyBuf.WriteString(*s)
 	}	 else if s,ok:=body.(*Body);ok {		//  自己增加的Body類型請躰的填充
 		b,err=json.Marshal(s.JsonData)		//  把json數據序列化后填充
 		_, err = bodyBuf.Write(b)
 	}	else if jsonCheck.MatchString(contentType) {
-		fmt.Println("e")
 		err = json.NewEncoder(bodyBuf).Encode(body)
 	} else if xmlCheck.MatchString(contentType) {
-		fmt.Println("f")
 		xml.NewEncoder(bodyBuf).Encode(body)
 	}
 
@@ -385,7 +382,6 @@ func setBody(body interface{}, contentType string) (bodyBuf *bytes.Buffer, err e
 
 	if bodyBuf.Len() == 0 {
 		err = fmt.Errorf("Invalid body type %s\n", contentType)
-		fmt.Println("failure finish.")
 		return nil, err
 	}
 	return bodyBuf, nil

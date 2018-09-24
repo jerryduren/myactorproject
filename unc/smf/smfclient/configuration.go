@@ -20,10 +20,11 @@ import (
 
 type contextKey string
 
-func (c contextKey) String() string {
+func (c contextKey) String() string {		//fmt.println的時候會調用這個類型的String方法
 	return "auth " + string(c)
 }
 
+// 這段即使用map[key]value來存儲認證的信息，提供四種認證方式，基本，OAuth2，AccessToken，APIKey
 var (
 	// ContextOAuth2 takes an oauth2.TokenSource as authentication for the request.
 	ContextOAuth2 = contextKey("token")
@@ -50,11 +51,12 @@ type APIKey struct {
 	Prefix string
 }
 
+//http.Client的配置信息，在net/http庫的基礎上進行了擴展
 type Configuration struct {
 	BasePath      string            `json:"basePath,omitempty"`
 	Host          string            `json:"host,omitempty"`
-	Scheme        string            `json:"scheme,omitempty"`
-	DefaultHeader map[string]string `json:"defaultHeader,omitempty"`
+	Scheme        string            `json:"scheme,omitempty"`		//這個字段幹啥的？指示授權方式嗎？如OAuth2或是Basice授權？
+	DefaultHeader map[string]string `json:"defaultHeader,omitempty"`		//請求頭裏面需要携帶的key-value，HTTP頭裏面其實都是一些key-value對
 	UserAgent     string            `json:"userAgent,omitempty"`
 	HTTPClient    *http.Client
 }
@@ -62,8 +64,8 @@ type Configuration struct {
 func NewConfiguration() *Configuration {
 	cfg := &Configuration{
 		BasePath:      "https://{apiRoot}/nsmf-pdusession/v1",
-		DefaultHeader: make(map[string]string),
-		UserAgent:     "OpenAPI-Generator/1.0.0/smf",
+		DefaultHeader: make(map[string]string),				// 沒有定制化的要求，這裏啥都不用增加
+		UserAgent:     "OpenAPI-Generator/1.0.0/smf",		//最關鍵的http.Client沒有在這初始化，而是在APIClient的時候初始化的
 	}
 	return cfg
 }
